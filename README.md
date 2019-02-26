@@ -1,2 +1,2 @@
 # awesome-sollus
-for awesome wm
+for awesome wm 4.0+
