@@ -1,7 +1,7 @@
 #!/bin/bash
 out=$1
-image_icon=$HOME/.config/awesome/icons_myaw/preferences-desktop-display.png
-#image_icon=/usr/share/icons/Arc/apps/24/preferences-desktop-wallpaper.png
+#image_icon=$HOME/.config/awesome/icons_myaw/preferences-desktop-display.png
+image_icon=/usr/share/icons/Arc/apps/24/preferences-desktop-wallpaper.png
 	# Ввод величины маштабирования
 			scale=$(yad --center \
 						--height=190 \
