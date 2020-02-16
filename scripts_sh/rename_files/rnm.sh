@@ -5,6 +5,8 @@
 #
 # video ин script 
 # https://www.dropbox.com/s/g1f520mdwndxoke/rename1.mp4
+# or this
+# https://youtu.be/1xmHM4C-cro
 #
 # Provided by the principle - as is  # Предоставляется по принципу -  Как есть
 #
