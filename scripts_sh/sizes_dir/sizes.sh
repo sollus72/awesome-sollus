@@ -48,7 +48,7 @@ var1=1
 			# Open directory in File manager
 			elif [[ $x -eq 77 ]]; then
 				dir="$(cat $s | sed 's/ /\|/ ' | cut -d"|" -f2)"
-				$file_manager "${dir}"
+				$file_manager "${dir}" &
 			# Back to previous directory
 			elif [[ $x -eq 99 ]]; then
 				if [[ "${dir}" = ${XDG_HOME:-$HOME} ]]; then
