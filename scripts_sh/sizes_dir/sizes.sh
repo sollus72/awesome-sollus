@@ -1,7 +1,19 @@
 #!/bin/sh
+#
+# 2020-02 created by sollus
+# https://github.com/sollus72
+#
 # View directory sizes for your HOME directory - Просмотр размеров директорий домашнего каталога
 # Opening the watched directory in the File manager - Открытие просматриваемой директории в файловом менеджере
+#
+# Provided by the principle - as is  # Предоставляется по принципу -  Как есть
+#
+# Dependencies  # Зависимости
+#
+# sudo pacman -S yad
+# https://github.com/v1cont/yad
 # -------------------------------------------------------------------------------------------------------------
+
 # Script Icon Location  # Расположение иконки скрипта
 patch_icon=${XDG_HOME:-$HOME}/.config/awesome/size1.png
 
