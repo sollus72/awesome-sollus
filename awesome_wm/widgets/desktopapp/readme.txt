@@ -29,3 +29,16 @@
 --         { -- Right widgets
 --             ...
 -------------------------------------------------------------------------
+-- Usage hotkeys
+-- add in rc.lua
+...
+    awful.key({ modkey,           }, "a", function () desktop_menu() 
+        awful.menu({items = nets , 
+                      theme = { font = 'Play 10', 
+                            width = 300, height = 19,
+                            border_color = '#6F6F6F', border_width = 2,
+                            bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' 
+                            }
+              }):toggle() end, 
+              {description = "Desktop Apps", group = "mykeys"}),
+...
