@@ -60,11 +60,13 @@ function desktop_menu ()
 		      desktop_apps_list = {}
 		        for str in f1:lines() do
 
-					local pos1, pos2 = string.find(str,".desktop")
-					local w = string.sub(str,1,pos1-1) .. string.sub(str,pos2+1)
+					-- local pos1, pos2 = string.find(str,".desktop")
+					-- local w = string.sub(str,1,pos1-1) .. string.sub(str,pos2+1)
+					local w = string.gsub(str, ".desktop", "")
 
-					local pos1, pos2 = string.find(str,"/usr/share/applications/")
-					local ww = string.sub(w,1,pos1-1) .. string.sub(w,pos2+1)
+					-- local pos1, pos2 = string.find(str,"/usr/share/applications/")
+					-- local ww = string.sub(w,1,pos1-1) .. string.sub(w,pos2+1)
+					local ww = string.gsub(w, "/usr/share/applications/", "")
 
 						desktop_apps_list[#desktop_apps_list + 1] = ww
 		        end
