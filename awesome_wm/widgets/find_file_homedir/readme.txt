@@ -1,3 +1,7 @@
+-- Dependencies:
+-- xdg-utils (for xdg-open)
+-- perl-file-mimeinfo
+
 # Binding a hotkey to a function find_file()
 # section globalkeys
 
