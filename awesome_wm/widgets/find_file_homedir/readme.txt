@@ -1,8 +1,10 @@
--- Finding a file in your home directory
--- Dependencies:
--- xdg-utils (for xdg-open)
--- perl-file-mimeinfo
--- font - ttf-play (AUR) or use another
+# Finding a file in your home directory
+# Links to YouTube https://youtu.be/A7nCBIwrKBk
+
+# Dependencies:
+# xdg-utils (for xdg-open)
+# perl-file-mimeinfo
+# font - ttf-play (AUR) or use another
 
 # Binding a hotkey to a function find_file()
 # section globalkeys
