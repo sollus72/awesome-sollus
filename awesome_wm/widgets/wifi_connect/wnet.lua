@@ -1,3 +1,12 @@
+------------------------------------------------------------------
+--[[
+Dependencies:
+sudo pacman -S iwd
+
+YouTube preview https://youtu.be/uGDDrhJ3R4c
+--]]
+-----------------------------------------------------------------
+
 local awful   = require("awful")
 local wibox   = require("wibox")
 local gears   = require("gears")
@@ -17,7 +26,7 @@ local status_bin_cmd    = "ping -c 1 8.8.8.8"
 local wnet_idle     = widget_dir .. "wnet-idle.svg"
 local wnet_x        = widget_dir .. "wnet-x.svg"
 
-local networks_icon    = widget_dir .. "networks1.svg"
+-- local networks_icon    = widget_dir .. "networks1.svg"
 local wifi_icon        = widget_dir .. "wifi1.svg"
 
 
