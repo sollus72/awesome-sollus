@@ -1,9 +1,34 @@
 ------------------------------------------------------------------
 --[[
+https://github.com/sollus72/awesome-sollus/tree/master/awesome_wm/widgets/wifi_connect
+YouTube preview https://youtu.be/DGfTbgW_X6I
+
 Dependencies:
 sudo pacman -S iwd
 
-YouTube preview https://youtu.be/uGDDrhJ3R4c
+git clone https://github.com/sollus72/awesome-sollus.git
+mkdir -p ~/config/awesome/nets/
+cp ~/awesome-sollus/awesome_wm/widgets/wifi_connect/* ~/config/awesome/nets/
+
+add requiere to rc.lua
+...
+local wnet_widget = require("nets.wnet")
+...
+
+add wnet_widget to rc.lua
+...
+    -- Add widgets to the wibox
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+...
+        },
+        s.mytasklist, -- Middle widget
+        { -- Right widgets
+...
+            wnet_widget,
+...            
+
 --]]
 -----------------------------------------------------------------
 
@@ -25,12 +50,13 @@ local status_bin_cmd    = "ping -c 1 8.8.8.8"
 
 local wnet_idle     = widget_dir .. "wnet-idle.svg"
 local wnet_x        = widget_dir .. "wnet-x.svg"
+local wnet_x2       = widget_dir .. "wnet-x2.svg"
 
 -- local networks_icon    = widget_dir .. "networks1.svg"
-local wifi_icon        = widget_dir .. "wifi1.svg"
+local wifi_icon     = widget_dir .. "wifi1.svg"
 
 
-local wnet_widget          = wibox.widget {
+local wnet_widget   = wibox.widget {
 {
 id      = "icon",
 image   = wnet_x,
@@ -130,17 +156,72 @@ function network_menu ()
             }
         end
 end
-      -- --Section menu
+
+function forget_network()
+      local f1 = io.popen('iwctl known-networks list | grep psk')
+      local nets1 = {}
+        for w in f1:lines() do
+            local ww = string.sub(w, 3, 18)
+            nets1[#nets1 + 1] = ww
+        end
+
+      nets2 = {}
+        for i, c in pairs(nets1) do
+          nets2[i] =
+            { c,
+             function()  notification = naughty.notify {
+                    text = c,
+                    font = 'Play 10',
+                    -- position = top_middle,
+                    icon = wifi_icon,
+                    icon_size = 18,
+                    border_color = '#6F6F6F', 
+                    border_width = 2, 
+                    bg_normal = '#3F3F3F',
+                    bg_focus = '#6F6F6F',
+                    fg = '#00ff00',
+                    title = "The network to be forgotten:",
+                    timeout = 0,
+                    hover_timeout = 0.1,
+                    -- height = 43,
+                    -- width = 200,
+                                                       },
+                      awful.prompt.run {
+                          prompt       = '<b>Forget Network? (y/n): </b>',
+                          bg_cursor    = '#FFFF00',   -- yellow
+                          textbox      = mouse.screen.mypromptbox.widget,
+                          exe_callback = function(input)
+                              if not input or #input == 0 then return end
+                                  if input == 'y' then 
+                                io.popen('iwctl known-networks ' .. c .. ' forget')
+                                  end
+                              end
+                                      }
+             end,
+             wnet_x2
+            }
+        end
+end
+  
+ --Section menu
       local menu_wifi = awful.menu({ items = { 
                                             { "Disconnect WIFI", function () awful.spawn.with_shell ('iwctl station wlan0 disconnect') end, wnet_x },
                                             { "Known Networks", function () known_networks() end, wnet_idle },
+                                            { "Forget Network", function () forget_network()
+                                                                awful.menu({items = nets2 , 
+                                                                          theme = { font = 'Play 10', width = 200, height = 19, 
+                                                                                    border_color = '#6F6F6F', border_width = 2, 
+                                                                                    bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' }
+                                                                          }):show()
+                                                             end, 
+                                                           wnet_x2 },
                                             { "WIFI Status", function () show_wnet_status() end, wnet_idle },
                                             { "WIFI connect", function () network_menu() 
                                                                 awful.menu({items = nets , 
                                                                           theme = { font = 'Play 10', width = 200, height = 19, 
                                                                                     border_color = '#6F6F6F', border_width = 2, 
                                                                                     bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' }
-                                                                          }):toggle() 
+                                                                          }):show() 
                                                               end, 
                                                             wnet_idle },
                                               },
