@@ -5,6 +5,7 @@ perl-file-mimeinfo
 font - ttf-play (AUR) or use another
 --]]
 function find_file()
+    mouse.coords { x = 20, y = 20}
     awful.prompt.run {
         prompt       = '<b>Find Name: </b>',
         bg_cursor    = '#FFFF00',   -- yellow
