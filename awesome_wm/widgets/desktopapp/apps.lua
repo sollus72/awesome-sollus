@@ -1,35 +1,4 @@
--------------------------------------------------------------------------
--- Dependencies:
--- gtk-launch
--- font = Play 10 or change
-
--- Usage
-
--- cp desktopapp/* ~/.config/awesome/
-
--- add in rc.lua require
--- 		...
--- 		local desktop_app_widget = require("desktopapp.apps")
--- 		...
-
--- add in rc.lua desktop_app_widget
--- 		...
--- 	    Create the wibox
--- 	    s.mywibox = awful.wibar({ position = "top", height = 20, screen = s })
-
--- 	    Add widgets to the wibox
--- 	    s.mywibox:setup {
---         layout = wibox.layout.align.horizontal,
---         { -- Left widgets
---             desktop_app_widget,
---  			...
---             s.mypromptbox,
---         },
---         s.mytasklist, -- Middle widget
---         { -- Right widgets
---             ...
--------------------------------------------------------------------------
-
+------------------------------------------------------------------------------------------
 local awful   = require("awful")
 local wibox   = require("wibox")
 local spawn   = require("awful.spawn")
@@ -39,10 +8,12 @@ local function script_path()
   return str:match("(.*/)"):gsub([[//]],[[/]])
 end
 
-local widget_dir      = script_path()
+local widget_dir   = script_path()
 
-local desktop_icon    = widget_dir .. "desktop1.png"
-local apps_icon       = widget_dir .. "apps1.png"
+local desktop_icon = widget_dir .. "desktop1.png"
+local apps_icon    = widget_dir .. "apps1.png"
+
+local number_apps  = 1
 
 -- Section widget_imagebox
 local desktop_app_widget = wibox.widget {
@@ -78,16 +49,26 @@ function desktop_menu ()
 					        end
 end
 
--- call application list menu
-     desktop_app_widget:buttons(awful.util.table.join(
-	      awful.button({ }, 1, function () desktop_menu() 
-	      awful.menu({items = nets , 
-		                  theme = { font = 'Play 10', 
-		                  			width = 300, height = 19,
-		                  			border_color = '#6F6F6F', border_width = 2,
-		                  			bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' 
-		                  		  }
-        			}):toggle() end)
-   	))
+-- Version without Wacher
+desktop_app_widget:connect_signal("button::press", function(_,_,_,button) 
+    if  (button == 1) then  
+		if number_apps == 1 then
+		    number_apps = 2
+		    desktop_menu()
+		    menu_apps = awful.menu({items = nets , 
+					                  theme = { font = 'Play 10', 
+					                  			width = 250, height = 19,
+					                  			border_color = '#6F6F6F', border_width = 2,
+					                  			bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' 
+					                  		  }
+									})
+	  	else
+		    number_apps = 1
+	    end
+		menu_apps:toggle()
+      -- elseif  (button == 2) then show_menu_etc()
+      -- elseif  (button == 3) then show_menu_etc()
+      end
+    end)
 
 return desktop_app_widget
