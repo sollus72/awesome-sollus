@@ -48,6 +48,11 @@ end
 local widget_dir        = script_path()
 local status_bin_cmd    = "ping -c 1 8.8.8.8"
 
+local args = args or {}
+local timeout = args.timeout or 3
+
+local number_net = 1
+
 local wnet_idle     = widget_dir .. "wnet-idle.svg"
 local wnet_x        = widget_dir .. "wnet-x.svg"
 local wnet_x2       = widget_dir .. "wnet-x2.svg"
@@ -118,6 +123,9 @@ function network_menu ()
         for w in f1:lines() do
             local ww = string.sub(w, 5, 25)
             nets1[#nets1 + 1] = ww
+              if ww:find('m>') then
+                table.remove(nets1, nets1[#nets1 +1])
+              end            
         end
 
       nets = {}
@@ -204,27 +212,34 @@ function forget_network()
 end
   
  --Section menu
+ -- menu option
+  local theme  = { font = 'Play 10', 
+                            width = 170, height = 19,
+                            border_color = '#6F6F6F', border_width = 2,
+                            bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' }
+
       local menu_wifi = awful.menu({ items = { 
                                             { "Disconnect WIFI", function () awful.spawn.with_shell ('iwctl station wlan0 disconnect') end, wnet_x },
-                                            { "Known Networks", function () known_networks() end, wnet_idle },
-                                            { "Forget Network", function () forget_network()
-                                                                awful.menu({items = nets2 , 
-                                                                          theme = { font = 'Play 10', width = 200, height = 19, 
-                                                                                    border_color = '#6F6F6F', border_width = 2, 
-                                                                                    bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' }
-                                                                          }):show()
-                                                             end, 
-                                                           wnet_x2 },
-                                            { "WIFI Status", function () show_wnet_status() end, wnet_idle },
-                                            { "WIFI connect", function () network_menu() 
-                                                                awful.menu({items = nets , 
-                                                                          theme = { font = 'Play 10', width = 200, height = 19, 
-                                                                                    border_color = '#6F6F6F', border_width = 2, 
-                                                                                    bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' }
-                                                                          }):show() 
+                                            { "Known Networks",  function () known_networks() end, wnet_idle },
+                                            { "Forget Network",  function () forget_network()
+                                                                    awful.menu({items = nets2 , theme = theme }):show() end, wnet_x2 },
+                                                           
+                                            { "WIFI Status",  function () show_wnet_status() end, wnet_idle },
+                                            { "WIFI connect", function ()
+                                                                if number_net == 1 then
+                                                                    number_net = 2
+                                                                    network_menu()
+                                                                    menu_net = awful.menu({items = nets , 
+                                                                                        theme = theme
+                                                                              })
+                                                                  else
+                                                                    number_net = 1
+                                                                end
+                                                                    menu_net:toggle()
                                                               end, 
                                                             wnet_idle },
                                               },
+                                   -- theme = theme
                                    theme = { width = 140, height = 18, border_color = '#6F6F6F', border_width = 2, bg_normal = '#3F3F3F', bg_focus = '#6F6F6F' }
                             })
 
@@ -237,5 +252,5 @@ wnet_widget:connect_signal("button::press", function(_,_,_,button)
   spawn.easy_async(status_bin_cmd, function(stdout, stderr, exitreason, exitcode) update(wnet_widget, stdout, stderr, exitreason, exitcode) end)
 end)
 
-watch(status_bin_cmd, 5, update, wnet_widget)
+watch(status_bin_cmd, timeout, update, wnet_widget)
 return wnet_widget
