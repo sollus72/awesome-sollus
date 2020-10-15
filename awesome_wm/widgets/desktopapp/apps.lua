@@ -2,10 +2,12 @@
 local awful   = require("awful")
 local wibox   = require("wibox")
 local spawn   = require("awful.spawn")
+local gears = require("gears")
+
 
 local function script_path()
   local str = debug.getinfo(2, "S").source:sub(2)
-  return str:match("(.*/)"):gsub([[//]],[[/]])
+  return str:match("(.*/)")
 end
 
 local widget_dir   = script_path()
@@ -30,15 +32,7 @@ function desktop_menu ()
 		local f1 = io.popen('ls /usr/share/applications/*.desktop')
 		      desktop_apps_list = {}
 		        for str in f1:lines() do
-
-					-- local pos1, pos2 = string.find(str,"[.]desktop")
-					-- local w = string.sub(str,1,pos1-1) .. string.sub(str,pos2+1)
-					local w = string.gsub(str, "[.]desktop", "")
-
-					-- local pos1, pos2 = string.find(str,"/usr/share/applications/")
-					-- local ww = string.sub(w,1,pos1-1) .. string.sub(w,pos2+1)
-					local ww = string.gsub(w, "/usr/share/applications/", "")
-
+					local ww = str:gsub('(.*/)',''):gsub("[.]d(.*)", "")
 						desktop_apps_list[#desktop_apps_list + 1] = ww
 		        end
 		        		  -- table desktop applications
